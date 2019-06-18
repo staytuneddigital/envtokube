@@ -29,6 +29,7 @@ type secrets struct {
 
 func main() {
 	namespacePtr := flag.String("namespace", "default", "Specifies the Namespace for the kube secrets file.")
+	name := flag.String("name", "secret", "The secret name.")
 	flag.Parse()
 	action := flag.Args()
 
@@ -54,11 +55,11 @@ func main() {
 	}
 
 
-	createNewSecrets(newFilename, myEnv, *namespacePtr)
+	createNewSecrets(newFilename, myEnv, *namespacePtr, *name)
 }
 
 
-func createNewSecrets(filename string, keys map[string]string, namespace string) error {
+func createNewSecrets(filename string, keys map[string]string, namespace, name string) error {
 	s            := secrets{}
 	s.APIVersion = "v1"
 	s.Kind       = "Secret"
@@ -66,7 +67,7 @@ func createNewSecrets(filename string, keys map[string]string, namespace string)
 	s.Type       = "Opaque"
 	s.Data = make(map[string]string)
 
-	s.Metadata.Name = filename
+	s.Metadata.Name = name
 
 	for key, value := range keys {
 		updateValue := base64.StdEncoding.EncodeToString([]byte(value))
