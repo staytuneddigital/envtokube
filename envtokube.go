@@ -90,16 +90,14 @@ func (s *secrets) writeSecrets(filename string) error {
 		fmt.Printf("error: %v", err)
 	}
 
-	writeErr := ioutil.WriteFile(filename+".yml", newYML, 0644)
+	writeErr := ioutil.WriteFile(filename+".yaml", newYML, 0644)
 
 	return writeErr
 }
 
 func extractName(filename string) string {
 	ext := filepath.Ext(filename)
-	// The secret name will have the directory and ext stripped
-	// /tmp/test.yml becomes test
-	name := filepath.Base(filename[0:len(filename)-len(ext)])
+	name := filename[0:len(filename)-len(ext)]
 
 	return name
 }
